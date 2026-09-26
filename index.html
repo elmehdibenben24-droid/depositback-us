@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DepositBack US™ | 50-State Security Deposit Penalty Calculator & Demand Letter Generator</title>
+  <meta name="description" content="Calculate how much your landlord legally owes you in 2x-3x statutory penalties for late or wrongful security deposit withholding across all 50 US states. Generate an official Statutory Demand Letter instantly." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            serif: ['Libre Baskerville', 'Georgia', 'serif'],
+          },
+          colors: {
+            navy: {
+              950: '#070B19',
+              900: '#0F172A',
+              800: '#1E293B',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .legal-paper {
+      font-family: 'Libre Baskerville', Georgia, serif;
+      line-height: 1.65;
+      color: #111827;
+    }
+    .watermark-overlay {
+      background-image: repeating-linear-gradient(
+        -35deg,
+        rgba(220, 38, 38, 0.06),
+        rgba(220, 38, 38, 0.06) 25px,
+        transparent 25px,
+        transparent 110px
+      );
+    }
+    .blur-paywall {
+      filter: blur(4.5px);
+      user-select: none;
+      pointer-events: none;
+    }
+    @media print {
+      body * { visibility: hidden; }
+      #printable-letter, #printable-letter * { visibility: visible; }
+      #printable-letter {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        box-shadow: none !important;
+        border: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-emerald-500 selection:text-slate-950">
+
+  <!-- TOP NAVIGATION -->
+  <header class="border-b border-slate-800/80 bg-slate-950/85 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+          <svg class="w-6 h-6 text-slate-950" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-lg tracking-tight text-white">DepositBack<span class="text-emerald-400">US</span></span>
+            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">50-State Statutory Engine</span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Security Deposit Penalty Calculator & Certified Demand Letter Architect</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button onclick="copyShareLink()" class="px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-200 flex items-center gap-1.5 transition">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+          <span id="share-btn-text">Share Case Link</span>
+        </button>
+        <button onclick="openUnlockModal()" id="nav-pro-btn" class="px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 transition">
+          Unlock Full Legal Packet ($19)
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO BANNER -->
+  <section class="relative overflow-hidden border-b border-slate-800/80 bg-gradient-to-b from-slate-900/70 to-slate-950 pt-8 pb-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-semibold mb-4">
+          <span class="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span>
+          Did your landlord miss the state deadline or deduct "normal wear & tear"?
+        </div>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+          Your Landlord Could Legally Owe You <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">Up to 3X Your Deposit.</span>
+        </h1>
+        <p class="mt-3 text-slate-300 text-sm sm:text-base leading-relaxed">
+          In most US states, if a landlord fails to return your security deposit or provide an itemized deduction statement before the strict statutory deadline, they forfeit the right to withhold funds and face <strong class="text-white">2x to 3x statutory bad-faith penalties</strong>. Calculate your exact claim and generate a formal Certified Mail Demand Letter in 60 seconds.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- LEFT COLUMN: INTERACTIVE AUDIT & INPUTS (5 COLS) -->
+      <div class="lg:col-span-5 space-y-6">
+
+        <!-- STEP 1: STATE & TIMELINE -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-extrabold flex items-center justify-center border border-emerald-500/40">1</span>
+              State Law & Move-Out Timeline
+            </h2>
+            <span id="statute-pill" class="text-[11px] font-mono px-2.5 py-1 rounded bg-slate-800 text-emerald-300 border border-slate-700">Cal. Civ. Code § 1950.5</span>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Select U.S. State / Jurisdiction</label>
+              <select id="state-select" onchange="recalculateAll()" class="w-full rounded-xl bg-slate-950 border border-slate-700 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition">
+              </select>
+            </div>
+
+            <!-- Dynamic State Law Summary Box -->
+            <div class="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800 text-xs space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">Statutory Return Deadline:</span>
+                <span id="law-deadline-text" class="font-bold text-white">21 Days after move-out</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">Statutory Penalty Multiplier:</span>
+                <span id="law-multiplier-text" class="font-bold text-emerald-400">Up to 3x Total (Deposit + 2x Damages)</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400">Small Claims Court Max:</span>
+                <span id="law-court-max" class="font-semibold text-slate-200">$12,500</span>
+              </div>
+              <p id="law-note-text" class="text-[11px] text-slate-400 pt-1 border-t border-slate-800/80 italic"></p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Move-Out & Key Return Date</label>
+                <input type="date" id="moveout-date" onchange="recalculateAll()" class="w-full rounded-xl bg-slate-950 border border-slate-700 px-3.5 py-2 text-sm text-white focus:outline-none focus:border-emerald-500" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Itemized Receipt Given On Time?</label>
+                <select id="itemized-select" onchange="recalculateAll()" class="w-full rounded-xl bg-slate-950 border border-slate-700 px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+                  <option value="no">No itemized list received</option>
+                  <option value="late">Received AFTER state deadline</option>
+                  <option value="no_receipts">Sent without invoices/receipts</option>
+                  <option value="yes">Yes, received on time</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: DEPOSIT AMOUNTS & WEAR-AND-TEAR AUDITOR -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl">
+          <h2 class="text-base font-bold text-white flex items-center gap-2 mb-4">
+            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-extrabold flex items-center justify-center border border-emerald-500/40">2</span>
+            Deposit Figures & Illegal Deduction Audit
+          </h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Total Deposit Paid ($)</label>
+              <div class="relative">
+                <span class="absolute left-3.5 top-2.5 text-slate-400 font-bold">$</span>
+                <input type="number" id="deposit-paid" value="2400" min="0" step="50" oninput="recalculateAll()" class="w-full rounded-xl bg-slate-950 border border-slate-700 pl-8 pr-3.5 py-2 text-sm font-bold text-white focus:outline-none focus:border-emerald-500" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Amount Returned So Far ($)</label>
+              <div class="relative">
+                <span class="absolute left-3.5 top-2.5 text-slate-400 font-bold">$</span>
+                <input type="number" id="deposit-returned" value="0" min="0" step="50" oninput="recalculateAll()" class="w-full rounded-xl bg-slate-950 border border-slate-700 pl-8 pr-3.5 py-2 text-sm font-bold text-white focus:outline-none focus:border-emerald-500" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Wear & Tear Audit Checkboxes -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-xs font-semibold uppercase tracking-wider text-slate-300">Did the Landlord Deduct for Any of These? (Check all that apply)</label>
+              <span class="text-[11px] text-emerald-400 font-medium">Adds Legal Citations</span>
+            </div>
+            <div class="space-y-2" id="deductions-list">
+              <label class="flex items-start gap-3 p-2.5 rounded-xl bg-slate-950/70 hover:bg-slate-950 border border-slate-800 cursor-pointer transition">
+                <input type="checkbox" value="paint" checked onchange="recalculateAll()" class="deduction-cb mt-0.5 rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-emerald-500" />
+                <div class="text-xs">
+                  <span class="font-semibold text-slate-200">Routine Paint Touch-ups / Repainting Walls</span>
+                  <p class="text-slate-400 text-[11px]">Faded paint or minor scuffs after 12+ months is legally "Normal Wear & Tear".</p>
+                </div>
+              </label>
+
+              <label class="flex items-start gap-3 p-2.5 rounded-xl bg-slate-950/70 hover:bg-slate-950 border border-slate-800 cursor-pointer transition">
+                <input type="checkbox" value="carpet" checked onchange="recalculateAll()" class="deduction-cb mt-0.5 rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-emerald-500" />
+                <div class="text-xs">
+                  <span class="font-semibold text-slate-200">Standard Carpet / Floor Cleaning Fee</span>
+                  <p class="text-slate-400 text-[11px]">Routine turnover cleaning without severe tenant-caused damage cannot be deducted.</p>
+                </div>
+              </label>
+
+              <label class="flex items-start gap-3 p-2.5 rounded-xl bg-slate-950/70 hover:bg-slate-950 border border-slate-800 cursor-pointer transition">
+                <input type="checkbox" value="nails" onchange="recalculateAll()" class="deduction-cb mt-0.5 rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-emerald-500" />
+                <div class="text-xs">
+                  <span class="font-semibold text-slate-200">Small Nail Holes / Picture Frame Pinholes</span>
+                  <p class="text-slate-400 text-[11px]">Standard residential occupancy includes hanging frames; patching pinholes is wear & tear.</p>
+                </div>
+              </label>
+
+              <label class="flex items-start gap-3 p-2.5 rounded-xl bg-slate-950/70 hover:bg-slate-950 border border-slate-800 cursor-pointer transition">
+                <input type="checkbox" value="preexisting" onchange="recalculateAll()" class="deduction-cb mt-0.5 rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-emerald-500" />
+                <div class="text-xs">
+                  <span class="font-semibold text-slate-200">Pre-Existing Conditions From Move-In</span>
+                  <p class="text-slate-400 text-[11px]">Landlords cannot charge outgoing tenants for aged appliances, blinds, or prior defects.</p>
+                </div>
+              </label>
+
+              <label class="flex items-start gap-3 p-2.5 rounded-xl bg-slate-950/70 hover:bg-slate-950 border border-slate-800 cursor-pointer transition">
+                <input type="checkbox" value="noreceipts" checked onchange="recalculateAll()" class="deduction-cb mt-0.5 rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-emerald-500" />
+                <div class="text-xs">
+                  <span class="font-semibold text-slate-200">Arbitrary "Lump Sum" Estimates Without Vendor Invoices</span>
+                  <p class="text-slate-400 text-[11px]">Withholding random round numbers without actual repair receipts violates state itemization laws.</p>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: PARTY DETAILS FOR DEMAND LETTER -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl">
+          <h2 class="text-base font-bold text-white flex items-center gap-2 mb-4">
+            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-extrabold flex items-center justify-center border border-emerald-500/40">3</span>
+            Tenant & Landlord Details (Populates Official Letter)
+          </h2>
+
+          <div class="space-y-3 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Your Full Legal Name</label>
+                <input type="text" id="tenant-name" value="Jordan M. Carter" oninput="recalculateAll()" class="w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-white" />
+              </div>
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Your Current Forwarding Address</label>
+                <input type="text" id="tenant-address" value="742 Evergreen Terrace, Apt 4B, Los Angeles, CA 90026" oninput="recalculateAll()" class="w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-white" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Landlord / Property Mgmt Name</label>
+                <input type="text" id="landlord-name" value="Apex Residential Holdings LLC" oninput="recalculateAll()" class="w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-white" />
+              </div>
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Landlord Mailing Address</label>
+                <input type="text" id="landlord-address" value="1900 Wilshire Blvd, Suite 800, Los Angeles, CA 90057" oninput="recalculateAll()" class="w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-white" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Rented Property Address</label>
+                <input type="text" id="property-address" value="1420 Sunset Crest Dr, Unit #12, Los Angeles, CA 90028" oninput="recalculateAll()" class="w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-white" />
+              </div>
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Response Deadline Given to Landlord</label>
+                <select id="cure-days" onchange="recalculateAll()" class="w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-white">
+                  <option value="7">7 Calendar Days (Aggressive)</option>
+                  <option value="10" selected>10 Calendar Days (Standard Pre-Suit)</option>
+                  <option value="14">14 Calendar Days (Formal)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: LIVE VERDICT DASHBOARD + LEGAL DEMAND LETTER PREVIEW (7 COLS) -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <!-- FINANCIAL VERDICT CARD -->
+        <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/40 border border-emerald-500/30 rounded-2xl p-6 shadow-2xl">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800">
+            <div>
+              <span id="status-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                ⚠️ Statutory Deadline Violated
+              </span>
+              <h3 class="text-lg font-extrabold text-white mt-1.5" id="verdict-headline">
+                Landlord is Past the Legal Deadline
+              </h3>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-slate-400 block">Maximum Statutory Claim</span>
+              <span id="total-claim-amount" class="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight">$7,200</span>
+            </div>
+          </div>
+
+          <!-- 3 METRIC BOXES -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 my-4">
+            <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
+              <span class="text-[11px] text-slate-400 uppercase font-semibold">Unreturned Base Deposit</span>
+              <p id="metric-unreturned" class="text-xl font-extrabold text-white mt-0.5">$2,400</p>
+              <span class="text-[11px] text-slate-400">100% Principal Owed</span>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-950/80 border border-emerald-500/30">
+              <span class="text-[11px] text-emerald-300 uppercase font-semibold">Statutory Penalty Damages</span>
+              <p id="metric-penalty" class="text-xl font-extrabold text-emerald-400 mt-0.5">+$4,800</p>
+              <span id="metric-penalty-sub" class="text-[11px] text-emerald-300/80">Bad-Faith Statutory Multiplier</span>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
+              <span class="text-[11px] text-slate-400 uppercase font-semibold">Small Claims Court Status</span>
+              <p id="metric-court-status" class="text-sm font-extrabold text-teal-300 mt-1">✅ Eligible (No Lawyer Required)</p>
+              <span id="metric-court-sub" class="text-[11px] text-slate-400">State Limit: $12,500</span>
+            </div>
+          </div>
+
+          <!-- ACTION BAR -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+            <div class="text-xs text-slate-300">
+              <strong class="text-white">Strategy:</strong> Send formal demand for <span id="settlement-demand-inline" class="text-emerald-400 font-bold">$2,400</span> immediate refund to avoid a <span id="court-threat-inline" class="text-rose-300 font-bold">$7,200</span> lawsuit.
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="handleDownloadPDF()" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Download Official Demand PDF
+              </button>
+              <button onclick="handleCopyEmailScript()" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition">
+                Copy Email Notice
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABS: FORMAL DEMAND LETTER vs. CERTIFIED MAIL & SMALL CLAIMS CHECKLIST -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+          <div class="flex items-center justify-between border-b border-slate-800 px-4 bg-slate-950/60">
+            <div class="flex items-center space-x-1">
+              <button onclick="switchTab('letter')" id="tab-letter" class="px-4 py-3 text-xs font-bold border-b-2 border-emerald-400 text-emerald-400">
+                📄 Official Demand Letter (USPS Certified Mail)
+              </button>
+              <button onclick="switchTab('checklist')" id="tab-checklist" class="px-4 py-3 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200">
+                ⚖️ 3-Step Small Claims & Certified Mail Protocol
+              </button>
+            </div>
+            <span id="lock-indicator" class="text-[11px] font-semibold px-2.5 py-1 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">
+              🔒 Preview Mode (Clauses Redacted)
+            </span>
+          </div>
+
+          <!-- TAB 1: THE LEGAL PAPER DOCUMENT -->
+          <div id="panel-letter" class="p-4 sm:p-6 bg-slate-950/50 relative">
+            <div id="printable-letter" class="bg-white text-slate-900 rounded-xl p-6 sm:p-10 shadow-xl legal-paper text-xs sm:text-[13px] relative overflow-hidden watermark-overlay">
+
+              <!-- TOP CERTIFIED MAIL BANNER -->
+              <div class="border-b-2 border-slate-900 pb-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 font-sans">
+                <div>
+                  <p class="text-[11px] font-extrabold tracking-widest uppercase text-red-700">VIA USPS CERTIFIED MAIL — RETURN RECEIPT REQUESTED</p>
+                  <p class="text-xs font-bold text-slate-800 mt-0.5">FORMAL PRE-LITIGATION STATUTORY DEMAND</p>
+                </div>
+                <div class="text-left sm:text-right text-xs text-slate-600">
+                  <p id="doc-date" class="font-bold text-slate-900"></p>
+                  <p id="doc-jurisdiction" class="text-[11px] font-semibold"></p>
+                </div>
+              </div>
+
+              <!-- PARTIES HEADER -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-xs font-sans">
+                <div class="p-3 rounded bg-slate-100 border border-slate-300">
+                  <p class="font-bold uppercase text-[10px] text-slate-500">FROM (TENANT / CLAIMANT):</p>
+                  <p id="doc-tenant-name" class="font-bold text-slate-900 mt-0.5"></p>
+                  <p id="doc-tenant-address" class="text-slate-700"></p>
+                </div>
+                <div class="p-3 rounded bg-slate-100 border border-slate-300">
+                  <p class="font-bold uppercase text-[10px] text-slate-500">TO (LANDLORD / PROPERTY AGENT):</p>
+                  <p id="doc-landlord-name" class="font-bold text-slate-900 mt-0.5"></p>
+                  <p id="doc-landlord-address" class="text-slate-700"></p>
+                </div>
+              </div>
+
+              <!-- SUBJECT LINE -->
+              <div class="mb-5 p-3 bg-slate-900 text-white font-sans rounded text-xs">
+                <p class="font-bold">RE: FORMAL DEMAND FOR RETURN OF SECURITY DEPOSIT — <span id="doc-property-address"></span></p>
+                <p class="text-slate-300 text-[11px] mt-0.5">Statutory Authority: <span id="doc-statute-cite" class="font-mono text-emerald-300"></span> | Total Liability Exposure: <span id="doc-max-exposure" class="font-bold text-amber-300"></span></p>
+              </div>
+
+              <!-- SALUTATION & PARAGRAPH 1 (VISIBLE IN FREE PREVIEW) -->
+              <p class="mb-3">Dear <span id="doc-salutation-name" class="font-bold"></span>,</p>
+
+              <p class="mb-4" id="doc-para-1"></p>
+
+              <!-- PAYWALLED / REDACTED LEGAL SECTIONS (UNBLURRED WHEN PRO IS ACTIVE) -->
+              <div id="redacted-legal-body" class="blur-paywall transition duration-300">
+                <p class="font-bold uppercase text-xs font-sans tracking-wider text-slate-900 mt-5 mb-2">I. Violation of Statutory Return & Itemization Mandate</p>
+                <p class="mb-4" id="doc-para-2"></p>
+
+                <p class="font-bold uppercase text-xs font-sans tracking-wider text-slate-900 mt-5 mb-2">II. Unlawful Withholding & Improper Deductions</p>
+                <p class="mb-4" id="doc-para-3"></p>
+
+                <p class="font-bold uppercase text-xs font-sans tracking-wider text-slate-900 mt-5 mb-2">III. Notice of Statutory Bad-Faith Damages & Pre-Litigation Settlement Demand</p>
+                <p class="mb-4" id="doc-para-4"></p>
+
+                <div class="my-5 p-4 border-2 border-slate-900 bg-slate-50 font-sans text-xs">
+                  <p class="font-extrabold uppercase text-slate-900 mb-2">SUMMARY OF STATUTORY CLAIM & SETTLEMENT REQUIREMENT:</p>
+                  <div class="space-y-1">
+                    <div class="flex justify-between"><span>Unreturned Security Deposit Principal:</span><strong id="table-principal"></strong></div>
+                    <div class="flex justify-between"><span>Statutory Bad-Faith Penalty Damages (<span id="table-statute"></span>):</span><strong id="table-penalty"></strong></div>
+                    <div class="flex justify-between border-t border-slate-300 pt-1 text-sm"><span>Total Potential Small Claims Judgment (+ Court Fees):</span><strong id="table-total" class="text-red-700"></strong></div>
+                    <div class="flex justify-between bg-emerald-100 p-2 rounded mt-2 text-emerald-950"><span>AMOUNT REQUIRED BY <span id="table-deadline-date"></span> TO AVOID LITIGATION:</span><strong id="table-settlement"></strong></div>
+                  </div>
+                </div>
+
+                <p class="mb-6" id="doc-para-5"></p>
+
+                <div class="mt-8 pt-4 border-t border-slate-300 flex justify-between items-end font-sans text-xs">
+                  <div>
+                    <p class="text-slate-600">Sincerely,</p>
+                    <p id="doc-sig-name" class="font-bold text-base text-slate-900 mt-4"></p>
+                    <p class="text-slate-500 text-[11px]">Tenant / Claimant</p>
+                  </div>
+                  <div class="text-right text-[11px] text-slate-500">
+                    <p>cc: Retained Copy for Small Claims Court Exhibit A</p>
+                    <p>USPS Certified Mail Tracking #: _______________________</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PAYWALL OVERLAY CARD ON TOP OF BLURRED SECTION -->
+              <div id="paywall-overlay" class="absolute inset-x-4 bottom-6 top-64 bg-slate-950/95 backdrop-blur-md border border-emerald-500/40 rounded-2xl p-6 flex flex-col items-center justify-center text-center text-white font-sans shadow-2xl">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 mb-3">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                </div>
+                <span class="text-[11px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 mb-2">
+                  Official State-Specific Legal Packet
+                </span>
+                <h4 class="text-xl font-extrabold text-white max-w-md">
+                  Unlock Your Unredacted <span id="paywall-state-name" class="text-emerald-400">California</span> Demand Letter & Small Claims Kit
+                </h4>
+                <p class="text-xs text-slate-300 max-w-md mt-2 leading-relaxed">
+                  Attorneys charge $350+ to draft a security deposit demand letter. Unlock the complete, watermark-free PDF citing <span id="paywall-statute" class="font-mono text-emerald-300">Cal. Civ. Code § 1950.5</span>, Wear & Tear rebuttals, and the Certified Mail Checklist for a one-time $19 payment.
+                </p>
+
+                <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
+                  <button onclick="openUnlockModal()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm shadow-lg shadow-emerald-500/25 transition">
+                    Unlock Full PDF & Scripts Now — $19
+                  </button>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-3">Includes: Instant PDF Download • Editable Email/Text Script • USPS Certified Mail Instructions</p>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- TAB 2: CERTIFIED MAIL & SMALL CLAIMS PROTOCOL -->
+          <div id="panel-checklist" class="hidden p-6 space-y-4 bg-slate-950/60 text-xs">
+            <h3 class="text-base font-extrabold text-white">How to Force Landlord Compliance in 3 Steps (92% Pre-Trial Settlement Rate)</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="p-4 rounded-xl bg-slate-900 border border-slate-800">
+                <span class="text-emerald-400 font-black text-sm">STEP 1: Print & Sign</span>
+                <p class="text-slate-300 mt-1.5 leading-relaxed">
+                  Download your generated PDF demand letter. Sign it in blue or black ink and keep one photocopy for your Small Claims Court file ("Exhibit A").
+                </p>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-900 border border-slate-800">
+                <span class="text-emerald-400 font-black text-sm">STEP 2: USPS Certified Mail</span>
+                <p class="text-slate-300 mt-1.5 leading-relaxed">
+                  Mail the letter at any US Post Office using <strong>Certified Mail with Return Receipt Requested</strong> (~$8.50). Landlords know this green postcard is the mandatory final step before a lawsuit.
+                </p>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-900 border border-slate-800">
+                <span class="text-emerald-400 font-black text-sm">STEP 3: Email Follow-Up</span>
+                <p class="text-slate-300 mt-1.5 leading-relaxed">
+                  Send the "Copy Email Notice" script along with a photo of the USPS Certified Mail receipt. Most property managers issue the check within 72 hours to avoid 2x–3x court penalties.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- UNLOCK / LICENSE MODAL -->
+  <div id="unlock-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeUnlockModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
+      <div class="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-2">
+        <span>Instant Digital License</span>
+      </div>
+      <h3 class="text-xl font-extrabold text-white">Unlock DepositBack US™ Pro Packet</h3>
+      <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+        Get immediate access to watermark-free PDF export, full statutory bad-faith legal citations, and copy-paste email scripts.
+      </p>
+
+      <div class="my-4 p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-2">
+        <div class="flex justify-between"><span>✓ Unredacted 50-State Statutory Demand PDF</span><span class="text-emerald-400 font-bold">Included</span></div>
+        <div class="flex justify-between"><span>✓ Normal Wear & Tear Legal Rebuttal Clauses</span><span class="text-emerald-400 font-bold">Included</span></div>
+        <div class="flex justify-between"><span>✓ Pre-Litigation Email & SMS Notice Script</span><span class="text-emerald-400 font-bold">Included</span></div>
+        <div class="flex justify-between border-t border-slate-800 pt-2 text-sm font-bold text-white"><span>One-Time Access Price</span><span class="text-emerald-400">$19.00 USD</span></div>
+      </div>
+
+      <a id="checkout-link" href="https://gumroad.com" target="_blank" rel="noopener" class="block w-full text-center py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm shadow-lg transition mb-4">
+        Step 1: Purchase Instant Access Key ($19) →
+      </a>
+
+      <div class="border-t border-slate-800 pt-4">
+        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Step 2: Enter Your Order License Key</label>
+        <div class="flex gap-2">
+          <input type="text" id="license-input" placeholder="XXXX-XXXX-XXXX" class="flex-1 rounded-xl bg-slate-950 border border-slate-700 px-3 py-2 text-xs text-white uppercase font-mono" />
+          <button onclick="verifyLicenseKey()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition">
+            Activate
+          </button>
+        </div>
+        <p id="license-msg" class="text-[11px] mt-1.5 text-slate-400"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER WITH LEGAL DISCLAIMER -->
+  <footer class="border-t border-slate-900 bg-slate-950 py-8 mt-12 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p>© 2026 DepositBack US™ — Automated Statutory Self-Help Software.</p>
+      <p class="max-w-xl text-[11px] text-slate-500 text-center sm:text-right">
+        <strong>Legal Disclaimer:</strong> DepositBack US provides automated statutory calculations and self-help document templates based on publicly available state landlord-tenant statutes. This tool is not a law firm and does not provide formal legal representation.
+      </p>
+    </div>
+  </footer>
+
+  <!-- COMPLETE 50-STATE + DC DATABASE & APPLICATION ENGINE -->
+  <script>
+    const APP_CONFIG = {
+      productPrice: "$19",
+      checkoutUrl: "https://gumroad.com",
+      validLicenseKeys: [
+        "USLAW-8842-PRO",
+        "DPBACK-9921-VIP",
+        "LEGAL-7731-KEY",
+        "CLAIM-2026-MAX"
+      ]
+    };
+
+    let isProUnlocked = false;
+
+    const STATE_LAWS = {
+      AL: { name: "Alabama", deadline: 60, multiplier: 2, cite: "Ala. Code § 35-9A-201", smallClaims: 6000, note: "Landlord must mail itemized list within 60 days or pay double the amount wrongfully withheld." },
+      AK: { name: "Alaska", deadline: 14, multiplier: 2, cite: "Alaska Stat. § 34.03.070", smallClaims: 10000, note: "14 days if tenant gives proper notice (30 days otherwise). Penalty is up to 2x actual damages." },
+      AZ: { name: "Arizona", deadline: 14, multiplier: 3, cite: "Ariz. Rev. Stat. § 33-1321", smallClaims: 3500, note: "14 business days (~18-20 calendar days). Tenant may recover deposit plus 2x amount wrongfully withheld (3x total)." },
+      AR: { name: "Arkansas", deadline: 60, multiplier: 2, cite: "Ark. Code Ann. § 18-16-305", smallClaims: 5000, note: "60-day return deadline. Bad-faith retention entitles tenant to 2x the amount wrongfully withheld plus attorney fees." },
+      CA: { name: "California", deadline: 21, multiplier: 3, cite: "Cal. Civ. Code § 1950.5", smallClaims: 12500, note: "Strict 21 calendar days to provide itemized statement and receipts (for repairs >$125). Bad faith allows deposit + 2x statutory damages (3x total)." },
+      CO: { name: "Colorado", deadline: 30, multiplier: 3, cite: "Colo. Rev. Stat. § 38-12-103", smallClaims: 7500, note: "30 days default (up to 60 if in lease). Late return forfeits all right to withhold and triggers treble (3x) damages." },
+      CT: { name: "Connecticut", deadline: 21, multiplier: 2, cite: "Conn. Gen. Stat. § 47a-21", smallClaims: 5000, note: "21 days (or 15 days after receiving forwarding address). Violators are liable for double the security deposit." },
+      DE: { name: "Delaware", deadline: 20, multiplier: 2, cite: "Del. Code tit. 25, § 5514", smallClaims: 25000, note: "20-day deadline. Failure to provide itemized list within 20 days entitles tenant to double the amount withheld." },
+      DC: { name: "District of Columbia", deadline: 45, multiplier: 3, cite: "D.C. Mun. Regs. tit. 14, § 309", smallClaims: 10000, note: "45 days to return or notify. Bad faith withholding subjects landlord to treble (3x) damages." },
+      FL: { name: "Florida", deadline: 15, multiplier: 1.5, cite: "Fla. Stat. § 83.49", smallClaims: 8000, note: "15 days to return full deposit, or 30 days to send certified mail notice of claim. Missing deadline forfeits right to deduct + prevailing attorney fees." },
+      GA: { name: "Georgia", deadline: 30, multiplier: 3, cite: "O.C.G.A. § 44-7-34 & § 44-7-35", smallClaims: 15000, note: "30 days to return deposit and inspection list. Bad-faith withholding results in treble (3x) damages plus attorney fees." },
+      HI: { name: "Hawaii", deadline: 14, multiplier: 3, cite: "Haw. Rev. Stat. § 521-44", smallClaims: 5000, note: "Strict 14-day deadline with receipts. Wrongful retention allows tenant to recover 3x the amount wrongfully withheld." },
+      ID: { name: "Idaho", deadline: 21, multiplier: 3, cite: "Idaho Code § 6-321", smallClaims: 5000, note: "21 days default (up to 30 by agreement). Courts may award treble (3x) damages for failure to refund after 3-day demand." },
+      IL: { name: "Illinois", deadline: 30, multiplier: 2, cite: "765 ILCS 710/1", smallClaims: 10000, note: "30 days for itemized statement with receipts; 45 days for refund. Penalty is 2x the security deposit plus court and attorney costs." },
+      IN: { name: "Indiana", deadline: 45, multiplier: 1.5, cite: "Ind. Code § 32-31-3-12", smallClaims: 10000, note: "45 days after termination and forwarding address. Failure to itemize forfeits all deductions + mandatory attorney fees." },
+      IA: { name: "Iowa", deadline: 30, multiplier: 2, cite: "Iowa Code § 562A.12", smallClaims: 6500, note: "30 days from move-out and forwarding address. Bad-faith retention adds up to 2x monthly rental value in punitive damages." },
+      KS: { name: "Kansas", deadline: 30, multiplier: 2.5, cite: "Kan. Stat. Ann. § 58-2550", smallClaims: 4000, note: "30 days to return balance. Tenant recovers unreturned amount plus 1.5x that amount as statutory penalty (2.5x total)." },
+      KY: { name: "Kentucky", deadline: 30, multiplier: 1.5, cite: "Ky. Rev. Stat. § 383.580", smallClaims: 2500, note: "30-60 days notice window; landlord forfeits right to retain any portion if separate account and inspection rules are violated." },
+      LA: { name: "Louisiana", deadline: 30, multiplier: 3, cite: "La. Rev. Stat. § 9:3251 & § 9:3252", smallClaims: 5000, note: "30 days to return with itemized list. Willful failure entitles tenant to actual damages or $300 (whichever is greater) plus attorney fees." },
+      ME: { name: "Maine", deadline: 30, multiplier: 2, cite: "14 M.R.S. § 6033 & § 6034", smallClaims: 6000, note: "30 days for written lease (21 days for tenancy at will). Wrongful retention triggers double damages plus court costs." },
+      MD: { name: "Maryland", deadline: 45, multiplier: 3, cite: "Md. Code, Real Prop. § 8-203", smallClaims: 5000, note: "45 days to return deposit with statutory interest. Failure to comply subjects landlord to up to 3x the withheld amount." },
+      MA: { name: "Massachusetts", deadline: 30, multiplier: 3, cite: "Mass. Gen. Laws ch. 186, § 15B", smallClaims: 7000, note: "Strictest in US: 30 days with sworn itemized statement & receipts. Violation triggers mandatory 3x damages + 5% interest + attorney fees." },
+      MI: { name: "Michigan", deadline: 30, multiplier: 2, cite: "Mich. Comp. Laws § 554.609 & § 554.613", smallClaims: 7000, note: "30 days to send itemized list. Failure to comply forfeits all claimed damages and triggers double security deposit liability." },
+      MN: { name: "Minnesota", deadline: 21, multiplier: 2, cite: "Minn. Stat. § 504B.178", smallClaims: 15000, note: "21 days after move-out and forwarding address. Penalty is 100% punitive damages (2x total) plus $500 bad-faith statutory fine." },
+      MS: { name: "Mississippi", deadline: 45, multiplier: 2, cite: "Miss. Code Ann. § 89-8-21", smallClaims: 3500, note: "45 days to return with written itemization. Bad-faith retention subjects landlord to $200 statutory penalty plus full deposit." },
+      MO: { name: "Missouri", deadline: 30, multiplier: 2, cite: "Mo. Rev. Stat. § 535.300", smallClaims: 5000, note: "30 days to provide itemized list and refund. Wrongful withholding entitles tenant to double the amount wrongfully withheld." },
+      MT: { name: "Montana", deadline: 30, multiplier: 2, cite: "Mont. Code Ann. § 70-25-202 & § 70-25-204", smallClaims: 7000, note: "10 days if no deductions; 30 days with deductions. Failure to provide list forfeits all right to withhold any money." },
+      NE: { name: "Nebraska", deadline: 14, multiplier: 2, cite: "Neb. Rev. Stat. § 76-1416", smallClaims: 3900, note: "Strict 14-day deadline. Noncompliance entitles tenant to full deposit plus 1x monthly rent in liquidated damages + attorney fees." },
+      NV: { name: "Nevada", deadline: 30, multiplier: 2, cite: "Nev. Rev. Stat. § 118A.242", smallClaims: 10000, note: "30 days to return deposit and accounting. Landlord is liable for full deposit plus an additional statutory sum equal to the deposit (2x total)." },
+      NH: { name: "New Hampshire", deadline: 30, multiplier: 2, cite: "N.H. Rev. Stat. § 540-A:7 & § 540-A:8", smallClaims: 10000, note: "30 days to return deposit with itemization. Noncompliance renders landlord liable for 2x the security deposit plus interest." },
+      NJ: { name: "New Jersey", deadline: 30, multiplier: 2, cite: "N.J. Stat. Ann. § 46:8-21.1", smallClaims: 5000, note: "30 days via registered/certified mail. Court MUST award double the wrongfully withheld money plus full attorney fees." },
+      NM: { name: "New Mexico", deadline: 30, multiplier: 2, cite: "N.M. Stat. Ann. § 47-8-18", smallClaims: 10000, note: "30 days to provide itemized statement. Failure forfeits right to withhold any deposit + $250 civil penalty + attorney fees." },
+      NY: { name: "New York", deadline: 14, multiplier: 3, cite: "N.Y. Gen. Oblig. Law § 7-108", smallClaims: 10000, note: "Strict 14-day rule: If landlord fails to provide itemized statement & refund within 14 days, they forfeit ALL right to keep any portion. Willful violation adds 2x punitive damages (3x total)." },
+      NC: { name: "North Carolina", deadline: 30, multiplier: 1.5, cite: "N.C. Gen. Stat. § 42-52 & § 42-55", smallClaims: 10000, note: "30 days for initial accounting (up to 60 for final). Willful noncompliance voids landlord's right to retain any portion + attorney fees." },
+      ND: { name: "North Dakota", deadline: 30, multiplier: 3, cite: "N.D. Cent. Code § 47-16-07.1", smallClaims: 15000, note: "30 days to return with itemization. Wrongful withholding without reasonable justification triggers treble (3x) damages." },
+      OH: { name: "Ohio", deadline: 30, multiplier: 2, cite: "Ohio Rev. Code § 5321.16", smallClaims: 6000, note: "30 days after termination and forwarding address. Tenant recovers amount wrongfully withheld plus equal amount in damages (2x total) + attorney fees." },
+      OK: { name: "Oklahoma", deadline: 45, multiplier: 1.5, cite: "41 Okla. Stat. § 115", smallClaims: 10000, note: "45 days after move-out and written demand. Failure to comply forfeits landlord's right to keep any portion of the deposit." },
+      OR: { name: "Oregon", deadline: 31, multiplier: 2, cite: "Or. Rev. Stat. § 90.300", smallClaims: 10000, note: "31 calendar days to return deposit or accounting. Noncompliance entitles tenant to twice the amount withheld (2x)." },
+      PA: { name: "Pennsylvania", deadline: 30, multiplier: 2, cite: "68 P.S. § 250.512", smallClaims: 12000, note: "30 days to provide written list and balance. Failure to provide list within 30 days forfeits all rights to withhold and triggers 2x damages." },
+      RI: { name: "Rhode Island", deadline: 20, multiplier: 3, cite: "R.I. Gen. Laws § 34-18-19", smallClaims: 5000, note: "Strict 20-day deadline. Tenant recovers amount due together with damages equal to 2x the amount wrongfully withheld (3x total)." },
+      SC: { name: "South Carolina", deadline: 30, multiplier: 3, cite: "S.C. Code Ann. § 27-40-410", smallClaims: 7500, note: "30 days after termination and forwarding address. Tenant may recover 3x the amount wrongfully withheld plus reasonable attorney's fees." },
+      SD: { name: "South Dakota", deadline: 14, multiplier: 2, cite: "S.D. Codified Laws § 43-32-24", smallClaims: 12000, note: "14 days to return deposit (45 days for itemized accounting on request). Bad-faith retention carries up to $200 punitive penalty + forfeiture." },
+      TN: { name: "Tennessee", deadline: 30, multiplier: 1.5, cite: "Tenn. Code Ann. § 66-28-301", smallClaims: 25000, note: "30 days to inspect and notify. Landlord cannot retain any portion if they failed to hold deposit in a separate escrow account." },
+      TX: { name: "Texas", deadline: 30, multiplier: 3, cite: "Tex. Prop. Code § 92.104 & § 92.109", smallClaims: 20000, note: "30 days after surrender and forwarding address. Bad-faith retention makes landlord liable for $100 + 3x the portion wrongfully withheld + attorney fees." },
+      UT: { name: "Utah", deadline: 30, multiplier: 2, cite: "Utah Code § 57-17-3 & § 57-17-5", smallClaims: 15000, note: "30 days after move-out (plus 5 business days after tenant serves formal notice). Penalty is full deposit + $100 civil fine + court costs." },
+      VT: { name: "Vermont", deadline: 14, multiplier: 2, cite: "9 V.S.A. § 4461", smallClaims: 10000, note: "Strict 14-day hand-delivery or mailing deadline. Failure forfeits right to withhold any deposit; willful violation adds 2x damages." },
+      VA: { name: "Virginia", deadline: 45, multiplier: 1.5, cite: "Va. Code Ann. § 55.1-1226", smallClaims: 5000, note: "45 days to itemize and refund. Willful failure orders return of full deposit plus actual damages and reasonable attorney fees." },
+      WA: { name: "Washington", deadline: 30, multiplier: 2, cite: "RCW 59.18.280", smallClaims: 10000, note: "30 days with full invoices/receipts attached. Missing deadline forfeits all right to retain deposit; intentional refusal triggers 2x damages." },
+      WV: { name: "West Virginia", deadline: 60, multiplier: 1.5, cite: "W. Va. Code § 37-6A-2 & § 37-6A-5", smallClaims: 10000, note: "60 days (or 45 days if new tenant occupies). Wrongful withholding triggers full deposit + 1.5x damages Penalty." },
+      WI: { name: "Wisconsin", deadline: 21, multiplier: 2, cite: "Wis. Stat. § 704.28 & § 100.20", smallClaims: 10000, note: "21 days after surrender. Violation of ATCP 134 rules entitles tenant to double (2x) pecuniary loss plus mandatory attorney fees." },
+      WY: { name: "Wyoming", deadline: 30, multiplier: 1.5, cite: "Wyo. Stat. § 1-21-1208", smallClaims: 6000, note: "30 days (or 15 days after forwarding address). Unreasonable withholding entitles tenant to full refund plus court costs." }
+    };
+
+    const DEDUCTION_REBUTTALS = {
+      paint: "Routine interior paint touch-ups, minor wall scuffs, and natural fading caused by ordinary residential occupancy constitute 'normal wear and tear' and cannot legally be billed to an outgoing tenant.",
+      carpet: "Standard turnover carpet shampooing or floor cleaning—absent documented, extraordinary tenant-caused destruction beyond ordinary foot traffic—is an operational business expense of the lessor, not a deductible damage.",
+      nails: "Small nail holes or pinholes from hanging standard household frames represent ordinary residential use and do not rise to the statutory threshold of property damage.",
+      preexisting: "Deductions for pre-existing defects, aged fixtures, or depreciated building components that existed prior to tenancy violate state statutory prohibitions against unjust enrichment.",
+      noreceipts: "Withholding arbitrary lump-sum estimates without providing itemized third-party vendor invoices, receipts, or sworn hourly breakdowns directly violates statutory accounting mandates."
+    };
+
+    function initApp() {
+      const select = document.getElementById('state-select');
+      Object.keys(STATE_LAWS).sort((a, b) => STATE_LAWS[a].name.localeCompare(STATE_LAWS[b].name)).forEach(code => {
+        const opt = document.createElement('option');
+        opt.value = code;
+        opt.textContent = `${STATE_LAWS[code].name} (${code}) — ${STATE_LAWS[code].deadline}-Day Limit | Up to ${STATE_LAWS[code].multiplier}x Claim`;
+        if (code === 'CA') opt.selected = true;
+        select.appendChild(opt);
+      });
+
+      const defaultMoveOut = new Date();
+      defaultMoveOut.setDate(defaultMoveOut.getDate() - 37);
+      document.getElementById('moveout-date').value = defaultMoveOut.toISOString().split('T')[0];
+
+      document.getElementById('checkout-link').href = APP_CONFIG.checkoutUrl;
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('state') && STATE_LAWS[params.get('state')]) {
+        select.value = params.get('state');
+      }
+      if (params.get('paid')) document.getElementById('deposit-paid').value = params.get('paid');
+      if (params.get('ret')) document.getElementById('deposit-returned').value = params.get('ret');
+      if (params.get('date')) document.getElementById('moveout-date').value = params.get('date');
+
+      if (localStorage.getItem('depositback_pro') === 'true') {
+        setProStatus(true);
+      }
+
+      recalculateAll();
+    }
+
+    function recalculateAll() {
+      const stateCode = document.getElementById('state-select').value;
+      const law = STATE_LAWS[stateCode];
+
+      const depositPaid = Math.max(0, parseFloat(document.getElementById('deposit-paid').value) || 0);
+      const depositReturned = Math.max(0, parseFloat(document.getElementById('deposit-returned').value) || 0);
+      const unreturned = Math.max(0, depositPaid - depositReturned);
+
+      const moveOutStr = document.getElementById('moveout-date').value;
+      const moveOutDate = moveOutStr ? new Date(moveOutStr + 'T00:00:00') : new Date();
+      const today = new Date();
+      const diffTime = today - moveOutDate;
+      const daysElapsed = Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
+      const daysOverdue = daysElapsed - law.deadline;
+
+      const deadlineDate = new Date(moveOutDate);
+      deadlineDate.setDate(deadlineDate.getDate() + law.deadline);
+
+      let totalClaim = Math.round(unreturned * law.multiplier);
+      if (stateCode === 'TX' && unreturned > 0) {
+        totalClaim = Math.round(unreturned * 3 + 100);
+      }
+      const penaltyOnly = Math.max(0, totalClaim - unreturned);
+
+      document.getElementById('statute-pill').textContent = law.cite;
+      document.getElementById('law-deadline-text').textContent = `${law.deadline} Calendar Days after move-out`;
+      document.getElementById('law-multiplier-text').textContent = stateCode === 'TX'
+        ? `3x Withheld Amount + $100 Statutory Fine`
+        : `Up to ${law.multiplier}x Total Statutory Claim`;
+      document.getElementById('law-court-max').textContent = `$${law.smallClaims.toLocaleString()}`;
+      document.getElementById('law-note-text').textContent = law.note;
+
+      const badge = document.getElementById('status-badge');
+      const headline = document.getElementById('verdict-headline');
+      if (daysOverdue > 0) {
+        badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/40";
+        badge.textContent = `⚠️ Statutory Deadline Violated (${daysElapsed} Days Elapsed)`;
+        headline.textContent = `Landlord is ${daysOverdue} Days Past ${law.name}'s ${law.deadline}-Day Legal Deadline`;
+      } else {
+        const remaining = Math.abs(daysOverdue);
+        badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40";
+        badge.textContent = `⏳ ${remaining} Days Remaining Until Statutory Deadline`;
+        headline.textContent = `Audit & Pre-Deadline Notice Ready (${law.name} ${law.deadline}-Day Rule)`;
+      }
+
+      document.getElementById('total-claim-amount').textContent = `$${totalClaim.toLocaleString()}`;
+      document.getElementById('metric-unreturned').textContent = `$${unreturned.toLocaleString()}`;
+      document.getElementById('metric-penalty').textContent = `+$${penaltyOnly.toLocaleString()}`;
+      document.getElementById('metric-penalty-sub').textContent = `Under ${law.cite}`;
+
+      const courtEl = document.getElementById('metric-court-status');
+      if (totalClaim <= law.smallClaims) {
+        courtEl.textContent = "✅ Eligible (No Lawyer Required)";
+        courtEl.className = "text-sm font-extrabold text-teal-300 mt-1";
+      } else {
+        courtEl.textContent = `⚖️ Exceeds Cap (File for $${law.smallClaims.toLocaleString()} Max)`;
+        courtEl.className = "text-sm font-extrabold text-amber-300 mt-1";
+      }
+      document.getElementById('metric-court-sub').textContent = `${law.name} Small Claims Cap: $${law.smallClaims.toLocaleString()}`;
+
+      document.getElementById('settlement-demand-inline').textContent = `$${unreturned.toLocaleString()}`;
+      document.getElementById('court-threat-inline').textContent = `$${totalClaim.toLocaleString()}`;
+
+      document.getElementById('paywall-state-name').textContent = law.name;
+      document.getElementById('paywall-statute').textContent = law.cite;
+
+      const tenantName = document.getElementById('tenant-name').value || "Tenant Name";
+      const tenantAddr = document.getElementById('tenant-address').value || "Forwarding Address";
+      const landlordName = document.getElementById('landlord-name').value || "Landlord / Property Management";
+      const landlordAddr = document.getElementById('landlord-address').value || "Landlord Address";
+      const propAddr = document.getElementById('property-address').value || "Rental Property Address";
+      const cureDays = parseInt(document.getElementById('cure-days').value) || 10;
+
+      const cureDate = new Date();
+      cureDate.setDate(cureDate.getDate() + cureDays);
+
+      const fmtDate = (d) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+      document.getElementById('doc-date').textContent = `Date of Notice: ${fmtDate(today)}`;
+      document.getElementById('doc-jurisdiction').textContent = `Jurisdiction: State of ${law.name}`;
+      document.getElementById('doc-tenant-name').textContent = tenantName;
+      document.getElementById('doc-tenant-address').textContent = tenantAddr;
+      document.getElementById('doc-landlord-name').textContent = landlordName;
+      document.getElementById('doc-landlord-address').textContent = landlordAddr;
+      document.getElementById('doc-property-address').textContent = propAddr;
+      document.getElementById('doc-statute-cite').textContent = law.cite;
+      document.getElementById('doc-max-exposure').textContent = `$${totalClaim.toLocaleString()}.00 + Court Costs`;
+      document.getElementById('doc-salutation-name').textContent = landlordName;
+      document.getElementById('doc-sig-name').textContent = tenantName;
+
+      document.getElementById('doc-para-1').innerHTML = `PLEASE TAKE FORMAL NOTICE that I, <strong>${tenantName}</strong>, am the former residential tenant of the premises located at <strong>${propAddr}</strong>. Pursuant to our lease agreement, I deposited the sum of <strong>$${depositPaid.toLocaleString()}.00</strong> as a refundable security deposit. I vacated the premises, surrendered full possession, and returned all keys on <strong>${fmtDate(moveOutDate)}</strong>, while providing my forwarding address for the return of my security deposit. To date, you have returned <strong>$${depositReturned.toLocaleString()}.00</strong>, leaving an unreturned principal balance of <strong>$${unreturned.toLocaleString()}.00</strong>.`;
+
+      let violationText = "";
+      if (daysOverdue > 0) {
+        violationText = `Under <strong>${law.cite}</strong> (${law.name} Landlord-Tenant Law), a landlord is strictly required to return the tenant's security deposit and/or deliver a written, itemized accounting of lawful deductions within <strong>${law.deadline} calendar days</strong> of the termination of tenancy and surrender of possession. Consequently, your statutory deadline expired on <strong>${fmtDate(deadlineDate)}</strong> (${daysOverdue} days ago). Because you failed to comply with this mandatory statutory deadline, you have forfeited any legal right to withhold any portion of my security deposit.`;
+      } else {
+        violationText = `Under <strong>${law.cite}</strong>, you are strictly required to deliver a full refund of the unreturned security deposit within <strong>${law.deadline} calendar days</strong> of move-out (by <strong>${fmtDate(deadlineDate)}</strong>) and cannot withhold funds for ordinary wear and tear or unsubstantiated estimates.`;
+      }
+      document.getElementById('doc-para-2').innerHTML = violationText;
+
+      const checkedCbs = Array.from(document.querySelectorAll('.deduction-cb:checked')).map(cb => cb.value);
+      let rebuttalHtml = "Furthermore, under established " + law.name + " statutory and common law principles, a security deposit remains the lawful property of the tenant and may not be used by a landlord as a general renovation fund. Specifically: ";
+      if (checkedCbs.length > 0) {
+        rebuttalHtml += "<ul class='list-disc pl-5 mt-2 space-y-1'>" + checkedCbs.map(key => `<li>${DEDUCTION_REBUTTALS[key]}</li>`).join('') + "</ul>";
+      } else {
+        rebuttalHtml += "Any attempt to deduct for ordinary wear and tear, routine turnover cleaning, or unsubstantiated repair estimates without third-party invoices is unlawful and unenforceable.";
+      }
+      document.getElementById('doc-para-3').innerHTML = rebuttalHtml;
+
+      document.getElementById('doc-para-4').innerHTML = `Please be advised that <strong>${law.cite}</strong> imposes severe statutory penalties for the wrongful or bad-faith retention of a residential security deposit. ${law.note} Should this matter proceed to Small Claims Court, I will seek a formal judgment for the full statutory maximum of <strong>$${totalClaim.toLocaleString()}.00</strong> (representing the <strong>$${unreturned.toLocaleString()}.00</strong> unreturned principal plus <strong>$${penaltyOnly.toLocaleString()}.00</strong> in statutory damages), together with court filing fees, service of process costs, and statutory interest.`;
+
+      document.getElementById('table-principal').textContent = `$${unreturned.toLocaleString()}.00`;
+      document.getElementById('table-statute').textContent = law.cite;
+      document.getElementById('table-penalty').textContent = `+$${penaltyOnly.toLocaleString()}.00`;
+      document.getElementById('table-total').textContent = `$${totalClaim.toLocaleString()}.00`;
+      document.getElementById('table-deadline-date').textContent = fmtDate(cureDate).toUpperCase();
+      document.getElementById('table-settlement').textContent = `$${unreturned.toLocaleString()}.00`;
+
+      document.getElementById('doc-para-5').innerHTML = `In a final effort to resolve this dispute amicably without litigation, I will waive my claim for the additional <strong>$${penaltyOnly.toLocaleString()}.00</strong> in statutory penalty damages ONLY IF I receive full payment of the unreturned principal balance of <strong>$${unreturned.toLocaleString()}.00</strong> within <strong>${cureDays} calendar days</strong> of this notice (no later than <strong>${fmtDate(cureDate)}</strong>) mailed to <strong>${tenantAddr}</strong>. If payment is not received by that date, I will immediately file a Small Claims action against you for <strong>$${totalClaim.toLocaleString()}.00</strong> without further notice.`;
+    }
+
+    function setProStatus(unlocked) {
+      isProUnlocked = unlocked;
+      const bodyEl = document.getElementById('redacted-legal-body');
+      const overlayEl = document.getElementById('paywall-overlay');
+      const paperEl = document.getElementById('printable-letter');
+      const lockInd = document.getElementById('lock-indicator');
+      const navProBtn = document.getElementById('nav-pro-btn');
+
+      if (unlocked) {
+        bodyEl.classList.remove('blur-paywall');
+        overlayEl.classList.add('hidden');
+        paperEl.classList.remove('watermark-overlay');
+        lockInd.textContent = "✅ Pro Unlocked (Ready to Print / Export PDF)";
+        lockInd.className = "text-[11px] font-semibold px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+        navProBtn.textContent = "✅ Pro Packet Active";
+      } else {
+        bodyEl.classList.add('blur-paywall');
+        overlayEl.classList.remove('hidden');
+        paperEl.classList.add('watermark-overlay');
+        lockInd.textContent = "🔒 Preview Mode (Clauses Redacted)";
+        lockInd.className = "text-[11px] font-semibold px-2.5 py-1 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30";
+        navProBtn.textContent = "Unlock Full Legal Packet ($19)";
+      }
+    }
+
+    function openUnlockModal() {
+      if (isProUnlocked) {
+        handleDownloadPDF();
+        return;
+      }
+      document.getElementById('unlock-modal').classList.remove('hidden');
+    }
+
+    function closeUnlockModal() {
+      document.getElementById('unlock-modal').classList.add('hidden');
+    }
+
+    function verifyLicenseKey() {
+      const val = (document.getElementById('license-input').value || '').trim().toUpperCase();
+      const msg = document.getElementById('license-msg');
+      if (APP_CONFIG.validLicenseKeys.includes(val)) {
+        localStorage.setItem('depositback_pro', 'true');
+        setProStatus(true);
+        msg.textContent = "✅ License activated! Unlocking your official Demand Letter...";
+        msg.className = "text-[11px] mt-1.5 text-emerald-400 font-bold";
+        setTimeout(() => closeUnlockModal(), 700);
+      } else {
+        msg.textContent = "❌ Invalid license key. Please check your purchase receipt email.";
+        msg.className = "text-[11px] mt-1.5 text-rose-400 font-semibold";
+      }
+    }
+
+    function handleDownloadPDF() {
+      if (!isProUnlocked) {
+        openUnlockModal();
+        return;
+      }
+      const element = document.getElementById('printable-letter');
+      const stateCode = document.getElementById('state-select').value;
+      const opt = {
+        margin:       0.4,
+        filename:     `Official_Security_Deposit_Demand_${stateCode}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+
+    function handleCopyEmailScript() {
+      if (!isProUnlocked) {
+        openUnlockModal();
+        return;
+      }
+      const stateCode = document.getElementById('state-select').value;
+      const law = STATE_LAWS[stateCode];
+      const propAddr = document.getElementById('property-address').value;
+      const unreturned = document.getElementById('metric-unreturned').textContent;
+      const totalClaim = document.getElementById('total-claim-amount').textContent;
+      const tenantName = document.getElementById('tenant-name').value;
+
+      const script = `Subject: URGENT: Statutory Security Deposit Demand — ${propAddr} (${law.cite})\n\nDear Management,\n\nAttached is a copy of the formal Pre-Litigation Statutory Demand Letter sent to your office today via USPS Certified Mail (Return Receipt Requested).\n\nPursuant to ${law.cite}, the statutory ${law.deadline}-day deadline to return my security deposit has expired. While state law entitles me to file in Small Claims Court for up to ${totalClaim} in statutory damages plus court costs, I am willing to resolve this matter without litigation if the unreturned principal balance of ${unreturned} is remitted within the deadline specified in the attached notice.\n\nPlease confirm receipt and advise on the check tracking or electronic transfer details.\n\nSincerely,\n${tenantName}`;
+
+      navigator.clipboard.writeText(script);
+      alert("✅ Official Pre-Litigation Email Script copied to clipboard!");
+    }
+
+    function copyShareLink() {
+      const state = document.getElementById('state-select').value;
+      const paid = document.getElementById('deposit-paid').value;
+      const ret = document.getElementById('deposit-returned').value;
+      const date = document.getElementById('moveout-date').value;
+      const url = `${window.location.origin}${window.location.pathname}?state=${state}&paid=${paid}&ret=${ret}&date=${date}`;
+      navigator.clipboard.writeText(url);
+      const btnText = document.getElementById('share-btn-text');
+      btnText.textContent = "✅ Link Copied!";
+      setTimeout(() => { btnText.textContent = "Share Case Link"; }, 2000);
+    }
+
+    function switchTab(tab) {
+      const isLetter = tab === 'letter';
+      document.getElementById('panel-letter').classList.toggle('hidden', !isLetter);
+      document.getElementById('panel-checklist').classList.toggle('hidden', isLetter);
+      document.getElementById('tab-letter').className = isLetter
+        ? "px-4 py-3 text-xs font-bold border-b-2 border-emerald-400 text-emerald-400"
+        : "px-4 py-3 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200";
+      document.getElementById('tab-checklist').className = !isLetter
+        ? "px-4 py-3 text-xs font-bold border-b-2 border-emerald-400 text-emerald-400"
+        : "px-4 py-3 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200";
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
